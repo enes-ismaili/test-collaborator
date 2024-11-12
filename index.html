@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Testing Logger</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .loading.active {
+            display: block;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        /* Updated notification styles */
+        #notification {
+            position: fixed;
+            bottom: 20px; /* Increased bottom margin */
+            right: 20px;
+            z-index: 9999; /* Ensure it's above other elements */
+            visibility: hidden; /* Hide by default */
+            opacity: 0;
+            transform: translateY(0);
+            transition: visibility 0s, opacity 0.3s, transform 0.3s;
+        }
+        #notification.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Add margin to main content to prevent overlap */
+        .container {
+            margin-bottom: 80px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Security Testing Logger</h1>
+        
+        <!-- Loading indicator -->
+        <div id="loadingIndicator" class="loading">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+        
+        <div class="mb-4 flex justify-between items-center">
+            <div class="flex space-x-2">
+                <button id="clearLogs" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Clear Logs</button>
+                <button id="downloadLogs" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Download Logs</button>
+                <button id="copyPayloadUrl" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Copy Payload URL</button>
+            </div>
+            <div class="flex items-center space-x-2">
+                <input type="checkbox" id="autoRefresh" class="form-checkbox">
+                <label for="autoRefresh">Auto Refresh</label>
+                <select id="refreshInterval" class="ml-2 border rounded p-1">
+                    <option value="5000">5 seconds</option>
+                    <option value="10000">10 seconds</option>
+                    <option value="30000">30 seconds</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="mb-4">
+                <h2 class="text-xl font-semibold mb-2">Filters</h2>
+                <div class="flex space-x-4">
+                    <input type="text" id="ipFilter" placeholder="Filter by IP" class="border rounded p-2">
+                    <input type="text" id="methodFilter" placeholder="Filter by Method" class="border rounded p-2">
+                    <select id="statusFilter" class="border rounded p-2">
+                        <option value="">All Status Codes</option>
+                        <option value="200">200 OK</option>
+                        <option value="301">301 Moved</option>
+                        <option value="404">404 Not Found</option>
+                        <option value="500">500 Error</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="logs" class="space-y-2 max-h-96 overflow-y-auto font-mono text-sm"></div>
+        </div>
+
+        <!-- Notification toast -->
+          <div id="notification" class="bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+            Notification Message
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/2.30.0/date-fns.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
